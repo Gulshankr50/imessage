@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
-
+import Message from "../models/message.model.js";
+import { hasImageKitConfig, uploadChatMedia } from "../lib/imagekit.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export async function getUsersForSidebar(req, res) {
   try {
@@ -13,7 +15,6 @@ export async function getUsersForSidebar(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
 
 export async function getConversationsForSidebar(req, res) {
   try {
