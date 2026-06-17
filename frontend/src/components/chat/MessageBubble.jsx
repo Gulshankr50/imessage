@@ -22,6 +22,7 @@ export function MessageBubble({ message }) {
           <img
             src={withTransform(message.imageUrl, IMAGE_TRANSFORM)}
             alt=""
+            onClick={() => window.open(message.imageUrl, "_self")}
             className="mb-1.5 max-h-40 max-w-full rounded-lg object-cover sm:max-h-52 sm:rounded-xl"
           />
         ) : null}
