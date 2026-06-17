@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { withTransform } from "../../lib/imagekit";
 import { MessageVideo } from "./MessageVideo";
 
@@ -5,11 +6,13 @@ import { MessageVideo } from "./MessageVideo";
 const IMAGE_TRANSFORM = "q-auto,w-640,f-auto";
 
 export function MessageBubble({ message }) {
+  const [previewImage, setPreviewImage] = useState(null);
   const isOwnMessage = message.role === "me";
   const hasImage = Boolean(message.imageUrl);
   const hasVideo = Boolean(message.videoUrl);
 
   return (
+    <>
     <div className={`flex w-full ${isOwnMessage ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[min(90%,28rem)] rounded-2xl px-3 py-2 text-[15px] leading-snug sm:max-w-[min(75%,28rem)] sm:px-3.5 ${
@@ -22,8 +25,8 @@ export function MessageBubble({ message }) {
           <img
             src={withTransform(message.imageUrl, IMAGE_TRANSFORM)}
             alt=""
-            onClick={() => window.open(message.imageUrl, "_self")}
-            className="mb-1.5 max-h-40 max-w-full rounded-lg object-cover sm:max-h-52 sm:rounded-xl"
+            onClick={() => setPreviewImage(message.imageUrl)}
+            className="mb-1.5 max-h-40 max-w-full rounded-lg object-cover sm:max-h-52 sm:rounded-xl cursor-pointer"
           />
         ) : null}
         {hasVideo ? <MessageVideo src={message.videoUrl} /> : null}
@@ -39,5 +42,19 @@ export function MessageBubble({ message }) {
         </p>
       </div>
     </div>
+    
+    {previewImage && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+        onClick={() => setPreviewImage(null)}
+      >
+        <img
+          src={previewImage}
+          alt="Preview"
+          className="max-h-[90vh] max-w-[90vw] rounded-lg"
+        />
+      </div>
+    )}
+  </>
   );
 }
